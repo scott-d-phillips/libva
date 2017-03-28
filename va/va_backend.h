@@ -435,6 +435,20 @@ struct VADriverVTable
             VADriverContextP    ctx,
             VABufferID          buf_id          /* in */
         );
+
+        VAStatus
+        (*vaCreateSurfaceFromDmabuf)(
+            VADriverContextP    ctx,
+            VASurfaceDmabuf    *dmabuf,
+            VASurfaceID        *surface         /* out */
+        );
+
+        VAStatus
+        (*vaExportSurfaceDmabuf)(
+            VADriverContextP    ctx,
+            VASurfaceID         surface,
+            VASurfaceDmabuf    *dmabuf          /* out */
+        );
 };
 
 struct VADriverContext

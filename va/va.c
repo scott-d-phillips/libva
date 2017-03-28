@@ -1030,6 +1030,49 @@ vaCreateSurfaces(
     return vaStatus;
 }
 
+VAStatus vaCreateSurfaceFromDmabuf (
+    VADisplay dpy,
+    VASurfaceDmabuf *dmabuf,
+    VASurfaceID *surface
+)
+{
+    VADriverContextP ctx;
+    VAStatus vaStatus;
+
+    CHECK_DISPLAY(dpy);
+    ctx = CTX(dpy);
+    if (!ctx)
+        return VA_STATUS_ERROR_INVALID_DISPLAY;
+
+    if (ctx->vtable->vaCreateSurfaceFromDmabuf)
+        vaStatus = ctx->vtable->vaCreateSurfaceFromDmabuf(ctx, dmabuf, surface);
+    else
+        vaStatus = VA_STATUS_ERROR_UNIMPLEMENTED;
+
+    return vaStatus;
+}
+
+VAStatus vaExportSurfaceDmabuf (
+    VADisplay dpy,
+    VASurfaceID surface,
+    VASurfaceDmabuf *dmabuf
+)
+{
+    VADriverContextP ctx;
+    VAStatus vaStatus;
+
+    CHECK_DISPLAY(dpy);
+    ctx = CTX(dpy);
+    if (!ctx)
+        return VA_STATUS_ERROR_INVALID_DISPLAY;
+
+    if (ctx->vtable->vaExportSurfaceDmabuf)
+        vaStatus = ctx->vtable->vaExportSurfaceDmabuf(ctx, surface, dmabuf);
+    else
+        vaStatus = VA_STATUS_ERROR_UNIMPLEMENTED;
+
+    return vaStatus;
+}
 
 VAStatus vaDestroySurfaces (
     VADisplay dpy,

@@ -814,6 +814,17 @@ typedef VAGenericID VAContextID;
 
 typedef VAGenericID VASurfaceID;
 
+typedef struct _VASurfaceDmabuf
+{
+    uint32_t    width;
+    uint32_t    height;
+    uint32_t    drm_fourcc;
+    int         fds[4];
+    uint32_t    pitches[4];
+    uint32_t    offsets[4];
+    uint64_t    modifier;
+} VASurfaceDmabuf;
+
 #define VA_INVALID_ID		0xffffffff
 #define VA_INVALID_SURFACE	VA_INVALID_ID
 
@@ -1037,7 +1048,41 @@ vaCreateSurfaces(
     VASurfaceAttrib    *attrib_list,
     unsigned int        num_attribs
 );
-    
+
+/**
+ * \brief Creates a surface from supplied dmabuf memory
+ *
+ * Creates a single surface from the supplied dmabuf memory. The fds
+ * in the dmabuf struct remain owned by the caller and the caller is
+ * responsible for closing the fds when they are no longer needed.
+ *
+ * @param[in] dpy       the VA display
+ * @param[in] dmabuf    the dmabuf memory to create the surface from
+ * @param[out] surface  the newly created surface
+ */
+VAStatus vaCreateSurfaceFromDmabuf (
+    VADisplay dpy,
+    VASurfaceDmabuf *dmabuf,
+    VASurfaceID *surface /* out */
+);
+
+/**
+ * \brief Exports the surface as dmabuf memory.
+ *
+ * Exports the surface as dmabuf memory. The fds in the dmabuf struct
+ * are owned by the caller and the caller is responsible for closing
+ * the fds when they are no longer needed.
+ *
+ * @param[in] dpy       the VA display
+ * @param[in] surface   the surface
+ * @param[out] dmabuf   the dmabuf memory to create the surface from
+ */
+VAStatus vaExportSurfaceDmabuf (
+    VADisplay dpy,
+    VASurfaceID surface,
+    VASurfaceDmabuf *dmabuf /* out */
+);
+
 /**
  * vaDestroySurfaces - Destroy resources associated with surfaces. 
  *  Surfaces can only be destroyed after the context associated has been 
